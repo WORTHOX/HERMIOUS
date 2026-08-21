@@ -204,10 +204,14 @@ export default function DashboardScreen({ profile, onSchemeClick, onAddScheme, o
       </div>
 
       {/* Greeting below header */}
-      <div style={{ padding: '16px 20px 6px' }}>
-        <span style={{ fontSize: 14, color: 'var(--text-secondary)', fontWeight: 500 }}>Hello, </span>
-        <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)' }}>{profile.name}</span>
-        <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 2 }}>{profile.company}</p>
+      <div style={{ padding: '18px 20px 8px' }}>
+        <h2 style={{ fontSize: 20, color: 'var(--text-primary)', margin: 0, letterSpacing: -0.3 }}>
+          <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>Hello, </span>
+          <span style={{ fontWeight: 800 }}>{profile.name}</span>
+        </h2>
+        <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 4, fontWeight: 500 }}>
+          {profile.company}
+        </p>
       </div>
 
       <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 16, paddingBottom: 88 }}>
