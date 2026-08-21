@@ -259,7 +259,7 @@ body {
   transition: width 0.8s ease;
 }
 
-/* ── Back button ── */
+/* ── Back button (dark) ── */
 .back-btn {
   background: rgba(255,255,255,0.15);
   border: none;
@@ -271,3 +271,17 @@ body {
   transition: background 0.2s;
 }
 .back-btn:active { background: rgba(255,255,255,0.25); }
+
+/* ── Back button (light) ── */
+.back-btn-light {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+/* ── 5-tab bar ── */
+.tab-bar { padding-bottom: env(safe-area-inset-bottom, 16px); }

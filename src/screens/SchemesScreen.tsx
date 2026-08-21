@@ -1,77 +1,162 @@
 import React, { useState } from 'react';
 import { Profile, Scheme, fmt } from '../data';
-import { Search, Filter, TrendingUp, AlertTriangle, Clock, ChevronRight } from 'lucide-react';
+import { Search, SlidersHorizontal } from 'lucide-react';
 
-interface Props { profile: Profile; onSchemeClick: (id: string) => void; }
+interface Props {
+  profile: Profile;
+  onSchemeClick: (id: string) => void;
+  onAddScheme: () => void;
+}
 
-export default function SchemesScreen({ profile, onSchemeClick }: Props) {
+type Filter = 'all' | 'active' | 'completed';
+
+export default function SchemesScreen({ profile, onSchemeClick, onAddScheme }: Props) {
   const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState<'all' | 'active' | 'at_risk' | 'expired'>('all');
+  const [filter, setFilter] = useState<Filter>('all');
 
-  const filtered = profile.schemes.filter(s => {
-    const matchSearch = s.name.toLowerCase().includes(search.toLowerCase()) || s.provider.toLowerCase().includes(search.toLowerCase()) || s.category.toLowerCase().includes(search.toLowerCase());
-    const matchFilter = filter === 'all' || s.status === filter;
+  const allSchemes = profile.schemes;
+  const filtered = allSchemes.filter(s => {
+    const matchSearch = s.name.toLowerCase().includes(search.toLowerCase()) ||
+      s.brand.toLowerCase().includes(search.toLowerCase());
+    const matchFilter =
+      filter === 'all' ||
+      (filter === 'active' && (s.status === 'active' || s.status === 'at_risk')) ||
+      (filter === 'completed' && s.status === 'completed');
     return matchSearch && matchFilter;
   });
 
-  const icon = (status: Scheme['status']) => {
-    if (status === 'active') return <TrendingUp size={18} color="#27AE60" />;
-    if (status === 'at_risk') return <AlertTriangle size={18} color="#E74C3C" />;
-    return <Clock size={18} color="#F39C12" />;
+  const counts = {
+    all: allSchemes.length,
+    active: allSchemes.filter(s => s.status === 'active' || s.status === 'at_risk').length,
+    completed: allSchemes.filter(s => s.status === 'completed').length,
   };
-  const bg = (status: Scheme['status']) => status === 'active' ? '#EAFAF1' : status === 'at_risk' ? '#FDEDEC' : '#FEF9E7';
-  const amountColor = (status: Scheme['status']) => status === 'active' ? '#27AE60' : status === 'at_risk' ? '#E74C3C' : '#B7770D';
+
+  const TABS: { key: Filter; label: string }[] = [
+    { key: 'all', label: `All (${counts.all})` },
+    { key: 'active', label: `Active (${counts.active})` },
+    { key: 'completed', label: `Completed (${counts.completed})` },
+  ];
 
   return (
-    <div className="screen fade-in">
-      <div className="gradient-header">
-        <h2 style={{ color: '#fff', fontSize: 22, fontWeight: 800 }}>Schemes</h2>
-        <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, marginTop: 4 }}>{profile.totalSchemes} schemes · {profile.atRiskSchemes} at risk</p>
+    <div className="screen fade-in" style={{ background: '#fff' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '52px 20px 12px', background: '#fff' }}>
+        <div>
+          <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)' }}>Schemes</h2>
+        </div>
+        <button style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+          <SlidersHorizontal size={20} color="var(--text-secondary)" />
+        </button>
       </div>
 
-      <div style={{ padding: '16px 16px 0' }}>
-        {/* Search */}
-        <div className="input-group" style={{ marginBottom: 12 }}>
-          <span className="input-icon"><Search size={18} /></span>
-          <input placeholder="Search schemes..." value={search} onChange={e => setSearch(e.target.value)} />
-        </div>
-
-        {/* Filter tabs */}
-        <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4, scrollbarWidth: 'none' }}>
-          {(['all', 'active', 'at_risk', 'expired'] as const).map(f => (
-            <button key={f} onClick={() => setFilter(f)} style={{ flexShrink: 0, padding: '7px 16px', borderRadius: 99, border: 'none', fontWeight: 700, fontSize: 12, cursor: 'pointer', background: filter === f ? 'var(--primary)' : 'var(--card)', color: filter === f ? '#fff' : 'var(--text-secondary)', boxShadow: filter === f ? '0 2px 8px rgba(26,43,74,0.2)' : 'none', transition: 'all 0.2s' }}>
-              {f === 'all' ? 'All' : f === 'at_risk' ? 'At Risk' : f.charAt(0).toUpperCase() + f.slice(1)}
-            </button>
-          ))}
+      {/* Search */}
+      <div style={{ padding: '0 16px 0' }}>
+        <div style={{ position: 'relative', marginBottom: 0 }}>
+          <Search size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
+          <input
+            placeholder="Search schemes, brands..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              width: '100%', padding: '12px 14px 12px 40px',
+              border: '1.5px solid var(--border)', borderRadius: 12,
+              fontSize: 14, fontFamily: 'inherit', color: 'var(--text-primary)',
+              background: 'var(--bg)', outline: 'none',
+            }}
+          />
         </div>
       </div>
 
-      <div style={{ padding: '12px 16px' }}>
+      {/* Underline Tabs */}
+      <div style={{ display: 'flex', borderBottom: '1.5px solid var(--border)', margin: '12px 16px 0', gap: 0 }}>
+        {TABS.map(t => (
+          <button
+            key={t.key}
+            onClick={() => setFilter(t.key)}
+            style={{
+              padding: '10px 14px',
+              border: 'none',
+              borderBottom: filter === t.key ? '2.5px solid #27AE60' : '2.5px solid transparent',
+              marginBottom: -1.5,
+              fontWeight: 700, fontSize: 13, cursor: 'pointer',
+              background: 'none',
+              color: filter === t.key ? '#27AE60' : 'var(--text-secondary)',
+              transition: 'color 0.2s, border-color 0.2s',
+              whiteSpace: 'nowrap', fontFamily: 'inherit',
+            }}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Scheme Cards */}
+      <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 12, paddingBottom: 24 }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '40px 0' }}>
             <p style={{ color: 'var(--text-secondary)', fontSize: 16 }}>No schemes found</p>
           </div>
         ) : (
-          <div className="card">
-            {filtered.map(s => (
-              <div key={s.id} className="list-item" onClick={() => onSchemeClick(s.id)}>
-                <div style={{ width: 42, height: 42, borderRadius: 12, background: bg(s.status), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  {icon(s.status)}
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontWeight: 700, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.name}</p>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: 11, marginTop: 2 }}>{s.provider} · {s.category}</p>
-                  <p style={{ fontSize: 11, marginTop: 3, color: s.status === 'at_risk' ? '#E74C3C' : 'var(--text-secondary)' }}>Due: {new Date(s.dueDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
-                </div>
-                <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <p style={{ fontWeight: 800, color: amountColor(s.status), fontSize: 14 }}>{fmt(s.expectedBenefit)}</p>
-                  <ChevronRight size={14} color="var(--text-secondary)" style={{ marginTop: 4 }} />
-                </div>
-              </div>
-            ))}
-          </div>
+          filtered.map(s => <SchemeCard key={s.id} scheme={s} onClick={() => onSchemeClick(s.id)} />)
         )}
-        <div style={{ height: 20 }} />
+      </div>
+    </div>
+  );
+}
+
+function SchemeCard({ scheme: s, onClick }: { scheme: Scheme; onClick: () => void }) {
+  const statusBg = s.status === 'at_risk' ? '#FFF4F4' : s.status === 'active' ? '#F0FFF4' : '#F5F5F5';
+  const statusBorder = s.status === 'at_risk' ? '#FFCCCC' : s.status === 'active' ? '#C3F0D0' : '#E0E0E0';
+  const badgeBg = s.status === 'at_risk' ? '#FEF3CD' : s.status === 'active' ? '#DCFCE7' : '#F0F0F0';
+  const badgeColor = s.status === 'at_risk' ? '#D97706' : s.status === 'active' ? '#16A34A' : '#6B7280';
+  const badgeLabel = s.status === 'at_risk' ? 'At Risk' : s.status === 'active' ? 'Active' : 'Completed';
+
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        background: '#fff', borderRadius: 14, border: `1px solid ${statusBorder}`,
+        padding: '14px 16px', cursor: 'pointer',
+        boxShadow: '0 1px 6px rgba(0,0,0,0.06)',
+        transition: 'transform 0.15s',
+      }}
+    >
+      {/* Top row: brand logo + name + date + badge */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+        {/* Brand logo */}
+        <div style={{
+          width: 44, height: 44, borderRadius: 10,
+          background: s.brandColor + '15', border: `1.5px solid ${s.brandColor}30`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+        }}>
+          <span style={{ fontSize: s.brandInitials.length > 2 ? 9 : 12, fontWeight: 900, color: s.brandColor, letterSpacing: -0.5 }}>
+            {s.brandInitials}
+          </span>
+        </div>
+
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <p style={{ fontWeight: 700, fontSize: 14, color: 'var(--text-primary)', lineHeight: 1.3, paddingRight: 8 }}>{s.name}</p>
+            <span style={{ background: badgeBg, color: badgeColor, borderRadius: 6, padding: '3px 8px', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>
+              {badgeLabel}
+            </span>
+          </div>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2 }}>{s.dateRange}</p>
+        </div>
+      </div>
+
+      {/* Target + Recovery row */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 12, paddingTop: 10, borderTop: '1px solid var(--border)' }}>
+        <div>
+          <p style={{ fontSize: 11, color: 'var(--text-secondary)', fontWeight: 600 }}>Target</p>
+          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginTop: 2 }}>{s.targetLabel}</p>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <p style={{ fontSize: 11, color: 'var(--text-secondary)', fontWeight: 600 }}>Recovery</p>
+          <p style={{ fontSize: 15, fontWeight: 800, color: s.status === 'at_risk' ? '#E74C3C' : '#27AE60', marginTop: 2 }}>
+            {fmt(s.expectedBenefit)}
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -1,108 +1,102 @@
-import React, { useState } from 'react';
-import { Profile, Scheme, addScheme, getProfileById } from '../data';
-import { ArrowLeft, FileText, Upload, CheckCircle } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import type { Profile } from '../data';
+import { ArrowLeft, Upload, MessageCircle } from 'lucide-react';
 
-interface Props { profile: Profile; onBack: () => void; onSuccess: (updated: Profile) => void; }
+interface Props {
+  profile: Profile;
+  onBack: () => void;
+  onSuccess: (updated: Profile) => void;
+}
 
 export default function AddSchemeScreen({ profile, onBack, onSuccess }: Props) {
-  const [name, setName] = useState('');
-  const [provider, setProvider] = useState('');
-  const [category, setCategory] = useState('Government');
-  const [dueDate, setDueDate] = useState('');
-  const [benefit, setBenefit] = useState('');
-  const [description, setDescription] = useState('');
-  const [saved, setSaved] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
+  const [fileName, setFileName] = useState('');
+  const fileRef = useRef<HTMLInputElement>(null);
 
-  const categories = ['Government', 'Credit', 'Tax', 'Subsidy', 'Funding', 'Market'];
-
-  function handleSave() {
-    if (!name || !provider || !dueDate || !benefit) return alert('Please fill all required fields');
-    const scheme: Scheme = {
-      id: 'sch_' + Date.now(),
-      name, provider, category,
-      dueDate,
-      expectedBenefit: Number(benefit.replace(/[^0-9]/g, '')),
-      atRiskAmount: 0,
-      status: 'active',
-      description: description || 'Custom scheme added by user.',
-    };
-    addScheme(profile.id, scheme);
-    setSaved(true);
-    setTimeout(() => {
-      const updated = getProfileById(profile.id);
-      if (updated) onSuccess(updated);
-    }, 1200);
-  }
-
-  if (saved) {
-    return (
-      <div className="screen" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100%', gap: 16 }}>
-        <div style={{ width: 72, height: 72, borderRadius: 24, background: '#EAFAF1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <CheckCircle size={36} color="#27AE60" />
-        </div>
-        <h3 style={{ fontWeight: 800, fontSize: 20 }}>Scheme Added!</h3>
-        <p style={{ color: 'var(--text-secondary)', textAlign: 'center' }}>Your scheme has been saved successfully.</p>
-      </div>
-    );
+  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0];
+    if (f) {
+      setFileName(f.name);
+      setUploaded(true);
+      // Simulate AI extraction
+      setTimeout(() => {
+        alert(`AI extracted scheme details from "${f.name}". Review and save to add to your portfolio.`);
+      }, 500);
+    }
   }
 
   return (
-    <div className="screen fade-in">
-      <div className="gradient-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-          <button className="back-btn" onClick={onBack}><ArrowLeft size={18} /></button>
-          <h2 style={{ color: '#fff', fontSize: 20, fontWeight: 800 }}>Add Scheme</h2>
-        </div>
-        <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>Track a new government scheme or benefit</p>
+    <div className="screen fade-in" style={{ background: '#fff' }}>
+      {/* Header */}
+      <div style={{ padding: '52px 16px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', background: '#fff' }}>
+        <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, marginRight: 12 }}>
+          <ArrowLeft size={22} color="var(--text-primary)" />
+        </button>
+        <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text-primary)' }}>Upload Scheme</h2>
       </div>
 
-      <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <div className="card" style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div style={{ padding: '40px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
 
-          {[
-            { label: 'Scheme Name *', value: name, set: setName, placeholder: 'e.g. MSME Samadhaan Scheme' },
-            { label: 'Provider / Authority *', value: provider, set: setProvider, placeholder: 'e.g. Ministry of MSME' },
-          ].map(f => (
-            <div key={f.label}>
-              <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6 }}>{f.label}</p>
-              <input value={f.value} onChange={e => f.set(e.target.value)} placeholder={f.placeholder} style={{ width: '100%', padding: '12px 14px', border: '1.5px solid var(--border)', borderRadius: 10, fontSize: 15, fontFamily: 'inherit', color: 'var(--text-primary)', outline: 'none', background: 'var(--bg)' }} />
-            </div>
-          ))}
-
-          <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 8 }}>Category</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {categories.map(c => (
-                <button key={c} onClick={() => setCategory(c)} style={{ padding: '7px 14px', borderRadius: 99, border: '1.5px solid', borderColor: category === c ? 'var(--primary)' : 'var(--border)', background: category === c ? 'var(--primary)' : 'transparent', color: category === c ? '#fff' : 'var(--text-secondary)', fontWeight: 700, fontSize: 12, cursor: 'pointer', transition: 'all 0.2s' }}>{c}</button>
-              ))}
-            </div>
+        {/* Upload area */}
+        <div
+          onClick={() => fileRef.current?.click()}
+          style={{
+            width: '100%', borderRadius: 18, border: '2px dashed #C0CDD8',
+            padding: '48px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14,
+            cursor: 'pointer', background: uploaded ? '#F0FFF4' : '#FAFBFC',
+            transition: 'all 0.2s',
+          }}
+        >
+          <div style={{ width: 64, height: 64, borderRadius: 18, background: '#E8F5E9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Upload size={30} color="#27AE60" strokeWidth={2} />
           </div>
-
-          <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6 }}>Due Date *</p>
-            <input type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} style={{ width: '100%', padding: '12px 14px', border: '1.5px solid var(--border)', borderRadius: 10, fontSize: 15, fontFamily: 'inherit', color: 'var(--text-primary)', outline: 'none', background: 'var(--bg)' }} />
-          </div>
-
-          <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6 }}>Expected Benefit (₹) *</p>
-            <input type="number" value={benefit} onChange={e => setBenefit(e.target.value)} placeholder="e.g. 50000" style={{ width: '100%', padding: '12px 14px', border: '1.5px solid var(--border)', borderRadius: 10, fontSize: 15, fontFamily: 'inherit', color: 'var(--text-primary)', outline: 'none', background: 'var(--bg)' }} />
-          </div>
-
-          <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6 }}>Description (optional)</p>
-            <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Brief description of the scheme..." rows={3} style={{ width: '100%', padding: '12px 14px', border: '1.5px solid var(--border)', borderRadius: 10, fontSize: 14, fontFamily: 'inherit', color: 'var(--text-primary)', outline: 'none', background: 'var(--bg)', resize: 'none' }} />
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontWeight: 700, fontSize: 17, color: 'var(--text-primary)' }}>Upload Scheme Document</p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 6, lineHeight: 1.5 }}>
+              {uploaded ? `✓ ${fileName}` : 'Upload images, PDFs or\nWhatsApp forwards'}
+            </p>
           </div>
         </div>
+        <input ref={fileRef} type="file" accept="image/*,.pdf" style={{ display: 'none' }} onChange={handleFile} />
 
-        {/* Upload Doc */}
-        <div style={{ border: '2px dashed var(--border)', borderRadius: 16, padding: '24px 16px', textAlign: 'center', cursor: 'pointer', background: 'var(--card)' }}>
-          <Upload size={28} color="var(--text-secondary)" style={{ margin: '0 auto 8px' }} />
-          <p style={{ fontWeight: 700, color: 'var(--text-secondary)' }}>Upload Document (optional)</p>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4 }}>PDF, JPG, PNG · Max 10MB</p>
+        {/* Choose File button */}
+        <button
+          onClick={() => fileRef.current?.click()}
+          className="btn-primary"
+          style={{ background: 'linear-gradient(135deg, #27AE60, #2ECC71)', width: '100%' }}
+        >
+          Choose File
+        </button>
+
+        {/* OR divider */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%' }}>
+          <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+          <p style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 600 }}>OR</p>
+          <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
         </div>
 
-        <button className="btn-primary" onClick={handleSave}>Save Scheme</button>
-        <div style={{ height: 20 }} />
+        {/* WhatsApp import */}
+        <button
+          onClick={() => alert('WhatsApp import coming soon!')}
+          style={{
+            width: '100%', padding: '14px', border: '1.5px solid var(--border)', borderRadius: 99,
+            background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            gap: 10, fontSize: 15, fontWeight: 600, color: 'var(--text-primary)', fontFamily: 'inherit',
+          }}
+        >
+          <MessageCircle size={20} color="#25D366" fill="#25D366" />
+          Import from WhatsApp
+        </button>
+
+        {/* AI info banner */}
+        <div style={{ background: '#F0FFF4', border: '1px solid #A8DFBB', borderRadius: 14, padding: '14px 16px', width: '100%', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+          <div style={{ width: 22, height: 22, borderRadius: 6, background: '#27AE60', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+            <span style={{ color: '#fff', fontSize: 12, fontWeight: 900 }}>✓</span>
+          </div>
+          <p style={{ fontSize: 13, color: '#1E5C37', fontWeight: 500, lineHeight: 1.5 }}>
+            AI will extract scheme details automatically and match with your ledger.
+          </p>
+        </div>
       </div>
     </div>
   );
