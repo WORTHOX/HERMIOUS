@@ -126,36 +126,53 @@ export default function DashboardScreen({ profile, onSchemeClick, onAddScheme, o
     <div className="screen fade-in" style={{ background: '#fff' }}>
       {/* ── Top Bar — wireframe 4: ≡ | [H logo] HERMIOUS | 🔔 ── */}
       <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '38px 20px 16px', background: '#fff',
+        height: 56,
+        padding: '0 20px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        background: '#fff',
         borderBottom: '1px solid var(--border)',
+        boxSizing: 'border-box',
       }}>
         {/* Hamburger */}
         <button
           onClick={() => alert('Menu opened')}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: 0,
+            width: 36,
+            height: 36,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}
         >
           <Menu size={22} color="var(--text-primary)" strokeWidth={2.2} />
         </button>
 
-        {/* Center: H mark + HERMIOUS wordmark — crisp vector typography + logo mark */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        {/* Center: H mark + HERMIOUS wordmark — perfectly centered vertically */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, height: '100%' }}>
           <img
             src="/hermious-logo.png"
             alt="H"
             style={{
-              height: 28,
+              height: 24,
               width: 'auto',
               display: 'block',
               objectFit: 'contain',
             }}
           />
           <span style={{
-            fontSize: 18,
+            fontSize: 17,
             fontWeight: 900,
             color: 'var(--text-primary)',
             letterSpacing: 2,
             fontFamily: "'Outfit', 'Inter', -apple-system, sans-serif",
+            display: 'flex',
+            alignItems: 'center',
             lineHeight: 1,
           }}>
             HERMIOUS
@@ -165,11 +182,22 @@ export default function DashboardScreen({ profile, onSchemeClick, onAddScheme, o
         {/* Bell with notification dot */}
         <button
           onClick={onRefresh}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: 0,
+            width: 36,
+            height: 36,
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+          }}
         >
           <Bell size={22} color="var(--text-primary)" strokeWidth={2.2} />
           <span style={{
-            position: 'absolute', top: 3, right: 4, width: 7, height: 7,
+            position: 'absolute', top: 5, right: 3, width: 7, height: 7,
             borderRadius: '50%', background: '#E74C3C', border: '1.5px solid #fff',
           }} />
         </button>
