@@ -36,19 +36,28 @@ export default function LedgerMatchScreen({ profile, schemeId, onBack }: Props) 
 
   return (
     <div className="screen fade-in" style={{ background: '#fff' }}>
-      {/* Header */}
-      <div style={{ padding: '52px 16px 12px', background: '#fff', borderBottom: '1px solid var(--border)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-          <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-            <ArrowLeft size={22} color="var(--text-primary)" />
-          </button>
-          <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text-primary)' }}>Ledger Match</h2>
-          <button style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-            <Filter size={18} color="var(--text-secondary)" />
-          </button>
-        </div>
+      {/* Top Header Bar */}
+      <div style={{
+        height: 56,
+        padding: '0 16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        background: '#fff',
+        borderBottom: '1px solid var(--border)',
+        boxSizing: 'border-box',
+      }}>
+        <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center' }}>
+          <ArrowLeft size={22} color="var(--text-primary)" />
+        </button>
+        <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Ledger Match</h2>
+        <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center' }}>
+          <Filter size={18} color="var(--text-secondary)" />
+        </button>
+      </div>
 
-        {/* Tab switcher */}
+      {/* Tab switcher bar */}
+      <div style={{ padding: '12px 16px', background: '#fff', borderBottom: '1px solid var(--border)' }}>
         <div style={{ display: 'flex', gap: 8 }}>
           {(['summary', 'transactions'] as LedgerTab[]).map(t => (
             <button

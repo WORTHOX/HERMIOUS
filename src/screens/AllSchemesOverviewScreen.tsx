@@ -98,14 +98,23 @@ export default function AllSchemesOverviewScreen({ profile, onBack }: Props) {
   return (
     <div className="screen fade-in" style={{ background: '#fff' }}>
       {/* Header */}
-      <div style={{ padding: '52px 16px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff' }}>
+      <div style={{
+        height: 56,
+        padding: '0 16px',
+        borderBottom: '1px solid var(--border)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        background: '#fff',
+        boxSizing: 'border-box',
+      }}>
         {onBack ? (
-          <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
+          <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center' }}>
             <ArrowLeft size={22} color="var(--text-primary)" />
           </button>
         ) : <div style={{ width: 30 }} />}
-        <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text-primary)' }}>All Schemes Overview</h2>
-        <button style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+        <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>All Schemes Overview</h2>
+        <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center' }}>
           <Filter size={18} color="var(--text-secondary)" />
         </button>
       </div>

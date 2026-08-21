@@ -40,17 +40,24 @@ export default function SchemesScreen({ profile, onSchemeClick, onAddScheme }: P
   return (
     <div className="screen fade-in" style={{ background: '#fff' }}>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '52px 20px 12px', background: '#fff' }}>
-        <div>
-          <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)' }}>Schemes</h2>
-        </div>
-        <button style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-          <SlidersHorizontal size={20} color="var(--text-secondary)" />
+      <div style={{
+        height: 56,
+        padding: '0 20px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        background: '#fff',
+        borderBottom: '1px solid var(--border)',
+        boxSizing: 'border-box',
+      }}>
+        <h2 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>Schemes</h2>
+        <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center' }}>
+          <SlidersHorizontal size={20} color="var(--text-primary)" strokeWidth={2} />
         </button>
       </div>
 
       {/* Search */}
-      <div style={{ padding: '0 16px 0' }}>
+      <div style={{ padding: '0 16px 0', marginTop: 12 }}>
         <div style={{ position: 'relative', marginBottom: 0 }}>
           <Search size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
           <input

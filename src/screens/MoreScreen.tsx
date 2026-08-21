@@ -16,8 +16,17 @@ export default function MoreScreen({ profile, onLogout }: Props) {
   return (
     <div className="screen fade-in" style={{ background: '#fff' }}>
       {/* Header */}
-      <div style={{ padding: '52px 20px 16px', borderBottom: '1px solid var(--border)' }}>
-        <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', textAlign: 'center' }}>More</h2>
+      <div style={{
+        height: 56,
+        padding: '0 20px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderBottom: '1px solid var(--border)',
+        boxSizing: 'border-box',
+        background: '#fff',
+      }}>
+        <h2 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', margin: 0, textAlign: 'center' }}>More</h2>
       </div>
 
       {/* Profile Row */}

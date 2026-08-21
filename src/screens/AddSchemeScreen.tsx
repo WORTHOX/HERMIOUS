@@ -28,11 +28,19 @@ export default function AddSchemeScreen({ profile, onBack, onSuccess }: Props) {
   return (
     <div className="screen fade-in" style={{ background: '#fff' }}>
       {/* Header */}
-      <div style={{ padding: '52px 16px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', background: '#fff' }}>
-        <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, marginRight: 12 }}>
+      <div style={{
+        height: 56,
+        padding: '0 16px',
+        borderBottom: '1px solid var(--border)',
+        display: 'flex',
+        alignItems: 'center',
+        background: '#fff',
+        boxSizing: 'border-box',
+      }}>
+        <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, marginRight: 12, display: 'flex', alignItems: 'center' }}>
           <ArrowLeft size={22} color="var(--text-primary)" />
         </button>
-        <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text-primary)' }}>Upload Scheme</h2>
+        <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Upload Scheme</h2>
       </div>
 
       <div style={{ padding: '40px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
