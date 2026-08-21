@@ -76,7 +76,7 @@ export default function App() {
           schemeId={nav.schemeId}
           onBack={() => { refreshProfile(); setNav({ screen: 'main', tab: nav.fromTab }); }}
           onDelete={() => { refreshProfile(); setNav({ screen: 'main', tab: nav.fromTab }); }}
-          onEdit={() => {}}
+          onEdit={() => { refreshProfile(); }}
           onLedger={(id) => openLedger(id)}
           onClaim={(id) => openClaim(id)}
         />

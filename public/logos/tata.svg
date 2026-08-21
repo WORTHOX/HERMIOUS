@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
-  <circle cx="60" cy="60" r="54" fill="#005696"/>
-  <path d="M38,42 L82,42 L82,50 L64,50 L64,86 L56,86 L56,50 L38,50 Z" fill="#FFFFFF"/>
-  <text x="60" y="106" font-family="Arial, sans-serif" font-size="12" font-weight="800" fill="#005696" text-anchor="middle" letter-spacing="2">TATA</text>
+  <circle cx="60" cy="60" r="56" fill="#005696"/>
+  <path d="M36,44 L84,44 L84,52 L65,52 L65,86 L55,86 L55,52 L36,52 Z" fill="#FFFFFF"/>
+  <text x="60" y="106" font-family="Arial, sans-serif" font-size="12" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">TATA</text>
 </svg>
