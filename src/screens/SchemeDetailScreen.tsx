@@ -14,33 +14,38 @@ interface Props {
 }
 
 // SVG Donut Ring component
-function DonutRing({ pct, size = 120 }: { pct: number; size?: number }) {
-  const r = 44;
+function DonutRing({ pct, size = 124 }: { pct: number; size?: number }) {
+  const r = 46;
   const circ = 2 * Math.PI * r;
-  const fill = (pct / 100) * circ;
+  const safePct = Math.min(100, Math.max(0, pct));
+  const fill = (safePct / 100) * circ;
   const cx = size / 2;
   const cy = size / 2;
-  const isAtRisk = pct < 95;
+  const isAtRisk = safePct < 95;
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      {/* Track */}
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#F0F0F0" strokeWidth={10} />
-      {/* Progress */}
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ overflow: 'visible' }}>
+      {/* Background Track */}
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#EDF2F7" strokeWidth={11} />
+      {/* Progress Arc starting at 12 o'clock and moving clockwise */}
       <circle
-        cx={cx} cy={cy} r={r} fill="none"
-        stroke={isAtRisk ? '#F39C12' : '#27AE60'}
-        strokeWidth={10}
+        cx={cx}
+        cy={cy}
+        r={r}
+        fill="none"
+        stroke={isAtRisk ? '#E67E22' : '#27AE60'}
+        strokeWidth={11}
         strokeDasharray={`${fill} ${circ - fill}`}
-        strokeDashoffset={circ / 4}
+        strokeDashoffset={0}
+        transform={`rotate(-90 ${cx} ${cy})`}
         strokeLinecap="round"
-        style={{ transition: 'stroke-dasharray 1s ease' }}
+        style={{ transition: 'stroke-dasharray 0.6s ease' }}
       />
       {/* Center text */}
-      <text x={cx} y={cy - 6} textAnchor="middle" fontSize="18" fontWeight="900" fill={isAtRisk ? '#F39C12' : '#27AE60'}>
+      <text x={cx} y={cy - 4} textAnchor="middle" fontSize="20" fontWeight="900" fill={isAtRisk ? '#E67E22' : '#27AE60'}>
         {pct}%
       </text>
-      <text x={cx} y={cy + 12} textAnchor="middle" fontSize="10" fill="#6B7A9A">
+      <text x={cx} y={cy + 13} textAnchor="middle" fontSize="10" fontWeight="700" fill="#718096">
         achieved
       </text>
     </svg>

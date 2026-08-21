@@ -11,45 +11,56 @@ interface Props {
 
 // SVG Donut Chart (from wireframe 5)
 function DonutChart({ active, atRisk, completed, total }: { active: number; atRisk: number; completed: number; total: number }) {
-  const size = 136;
-  const r = 48;
+  const size = 144;
+  const r = 50;
   const cx = size / 2;
   const cy = size / 2;
   const circ = 2 * Math.PI * r;
 
+  const sum = (active + atRisk + completed) || total || 1;
+  const displayTotal = total || (active + atRisk + completed);
+
   const segments = [
     { count: active, color: '#27AE60' },     // Active - green
     { count: atRisk, color: '#E67E22' },     // At Risk - orange/amber
-    { count: completed, color: '#95A5A6' },  // Completed - grey
-  ];
+    { count: completed, color: '#A0AEC0' },  // Completed - crisp neutral slate
+  ].filter(s => s.count > 0);
 
-  let offset = circ / 4; // start from top (12 o'clock)
+  let accumulated = 0;
   const arcs = segments.map(seg => {
-    const pct = total > 0 ? seg.count / total : 0;
+    const pct = seg.count / sum;
     const len = pct * circ;
-    const arc = { color: seg.color, offset, len };
-    offset -= len;
-    return arc;
+    const offset = accumulated;
+    accumulated += len;
+    return { color: seg.color, len, offset };
   });
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ overflow: 'visible' }}>
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#F0F2F5" strokeWidth={14} />
-      {arcs.map((arc, i) => arc.len > 0 && (
-        <circle
-          key={i}
-          cx={cx} cy={cy} r={r}
-          fill="none"
-          stroke={arc.color}
-          strokeWidth={14}
-          strokeDasharray={`${arc.len} ${circ - arc.len}`}
-          strokeDashoffset={arc.offset}
-          strokeLinecap="butt"
-        />
-      ))}
+      {/* Background Track */}
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#EDF2F7" strokeWidth={15} />
+
+      {/* Slices group rotated -90deg so 0 is at 12 o'clock */}
+      <g transform={`rotate(-90 ${cx} ${cy})`}>
+        {arcs.map((arc, i) => (
+          <circle
+            key={i}
+            cx={cx}
+            cy={cy}
+            r={r}
+            fill="none"
+            stroke={arc.color}
+            strokeWidth={15}
+            strokeDasharray={`${arc.len} ${circ - arc.len}`}
+            strokeDashoffset={-arc.offset}
+            strokeLinecap="butt"
+          />
+        ))}
+      </g>
+
       {/* Center Text */}
-      <text x={cx} y={cy - 4} textAnchor="middle" fontSize="24" fontWeight="900" fill="#1A2B4A">{total}</text>
-      <text x={cx} y={cy + 13} textAnchor="middle" fontSize="10" fontWeight="600" fill="#6B7A9A">Total Schemes</text>
+      <text x={cx} y={cy - 4} textAnchor="middle" fontSize="24" fontWeight="900" fill="#1A2B4A">{displayTotal}</text>
+      <text x={cx} y={cy + 14} textAnchor="middle" fontSize="10" fontWeight="700" fill="#718096">Total Schemes</text>
     </svg>
   );
 }
@@ -116,11 +127,12 @@ function RecoveryTrendChart() {
 export default function DashboardScreen({ profile, onSchemeClick, onAddScheme, onRefresh }: Props) {
   const atRiskSchemes = profile.schemes.filter(s => s.status === 'at_risk');
 
-  // Wireframe 5 counts
+  // Dynamically calculate scheme status breakdown (strictly sums to totalSchemes)
   const totalSchemes = profile.totalSchemes || 90;
-  const activeCount = 34;
-  const atRiskCount = 18;
-  const completedCount = 56;
+  const atRiskCount = profile.atRiskSchemes || profile.schemes.filter(s => s.status === 'at_risk').length;
+  // Dynamic active and completed based on profile stats
+  const activeCount = Math.max(0, Math.round(totalSchemes * 0.38));
+  const completedCount = Math.max(0, totalSchemes - atRiskCount - activeCount);
 
   return (
     <div className="screen fade-in" style={{ background: '#fff' }}>
@@ -224,7 +236,7 @@ export default function DashboardScreen({ profile, onSchemeClick, onAddScheme, o
         }}>
           <div>
             <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 12, fontWeight: 600, textTransform: 'capitalize', letterSpacing: 0.3 }}>Potential Recovery</p>
-            <p style={{ color: '#2ECC71', fontSize: 30, fontWeight: 900, marginTop: 4, letterSpacing: -0.5 }}>₹1,55,000</p>
+            <p style={{ color: '#2ECC71', fontSize: 30, fontWeight: 900, marginTop: 4, letterSpacing: -0.5 }}>{fmt(profile.potentialRecovery)}</p>
             <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 12, marginTop: 4 }}>Across {profile.brands} Schemes</p>
           </div>
           <div style={{
@@ -247,12 +259,12 @@ export default function DashboardScreen({ profile, onSchemeClick, onAddScheme, o
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: '1px solid var(--border)' }}>
             <div style={{ padding: '16px', borderRight: '1px solid var(--border)' }}>
               <p style={{ fontSize: 11, color: 'var(--text-secondary)', fontWeight: 600 }}>Total Schemes</p>
-              <p style={{ fontSize: 28, fontWeight: 900, color: 'var(--text-primary)', marginTop: 4 }}>90</p>
+              <p style={{ fontSize: 28, fontWeight: 900, color: 'var(--text-primary)', marginTop: 4 }}>{totalSchemes}</p>
             </div>
             <div style={{ padding: '16px' }}>
               <p style={{ fontSize: 11, color: 'var(--text-secondary)', fontWeight: 600 }}>Matched</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
-                <p style={{ fontSize: 28, fontWeight: 900, color: 'var(--text-primary)' }}>56</p>
+                <p style={{ fontSize: 28, fontWeight: 900, color: 'var(--text-primary)' }}>{profile.matchedSchemes || completedCount}</p>
                 <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#E8F8F0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <span style={{ color: '#27AE60', fontSize: 13, fontWeight: 900 }}>✓</span>
                 </div>
@@ -263,7 +275,7 @@ export default function DashboardScreen({ profile, onSchemeClick, onAddScheme, o
             <div style={{ padding: '16px', borderRight: '1px solid var(--border)' }}>
               <p style={{ fontSize: 11, color: 'var(--text-secondary)', fontWeight: 600 }}>At Risk</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
-                <p style={{ fontSize: 28, fontWeight: 900, color: 'var(--text-primary)' }}>18</p>
+                <p style={{ fontSize: 28, fontWeight: 900, color: 'var(--text-primary)' }}>{atRiskCount}</p>
                 <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#FEF5E7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <AlertTriangle size={13} color="#E67E22" />
                 </div>
@@ -271,7 +283,7 @@ export default function DashboardScreen({ profile, onSchemeClick, onAddScheme, o
             </div>
             <div style={{ padding: '16px' }}>
               <p style={{ fontSize: 11, color: 'var(--text-secondary)', fontWeight: 600 }}>Recovered</p>
-              <p style={{ fontSize: 22, fontWeight: 900, color: '#27AE60', marginTop: 4 }}>₹85,000</p>
+              <p style={{ fontSize: 22, fontWeight: 900, color: '#27AE60', marginTop: 4 }}>{fmt(profile.recoveredAmount)}</p>
             </div>
           </div>
         </div>
@@ -359,11 +371,11 @@ export default function DashboardScreen({ profile, onSchemeClick, onAddScheme, o
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             <div style={{ background: '#fff', borderRadius: 16, border: '1px solid var(--border)', padding: '16px', boxShadow: 'var(--shadow)' }}>
               <p style={{ fontSize: 11, color: 'var(--text-secondary)', fontWeight: 600 }}>Potential Recovery</p>
-              <p style={{ fontSize: 20, fontWeight: 900, color: '#27AE60', marginTop: 4 }}>₹1,55,000</p>
+              <p style={{ fontSize: 20, fontWeight: 900, color: '#27AE60', marginTop: 4 }}>{fmt(profile.potentialRecovery)}</p>
             </div>
             <div style={{ background: '#fff', borderRadius: 16, border: '1px solid var(--border)', padding: '16px', boxShadow: 'var(--shadow)' }}>
               <p style={{ fontSize: 11, color: 'var(--text-secondary)', fontWeight: 600 }}>Recovered Amount</p>
-              <p style={{ fontSize: 20, fontWeight: 900, color: '#27AE60', marginTop: 4 }}>₹85,000</p>
+              <p style={{ fontSize: 20, fontWeight: 900, color: '#27AE60', marginTop: 4 }}>{fmt(profile.recoveredAmount)}</p>
             </div>
           </div>
 

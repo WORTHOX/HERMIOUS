@@ -6,45 +6,56 @@ interface Props { profile: Profile; onBack?: () => void; }
 
 // SVG Donut Chart
 function DonutChart({ active, atRisk, completed, total }: { active: number; atRisk: number; completed: number; total: number }) {
-  const size = 140;
+  const size = 144;
   const r = 50;
   const cx = size / 2;
   const cy = size / 2;
   const circ = 2 * Math.PI * r;
 
+  const sum = (active + atRisk + completed) || total || 1;
+  const displayTotal = total || (active + atRisk + completed);
+
   const segments = [
     { count: active, color: '#27AE60' },
-    { count: atRisk, color: '#F39C12' },
-    { count: completed, color: '#C8C8C8' },
-  ];
+    { count: atRisk, color: '#E67E22' },
+    { count: completed, color: '#A0AEC0' },
+  ].filter(s => s.count > 0);
 
-  let offset = circ / 4; // start from top
+  let accumulated = 0;
   const arcs = segments.map(seg => {
-    const pct = total > 0 ? seg.count / total : 0;
+    const pct = seg.count / sum;
     const len = pct * circ;
-    const arc = { color: seg.color, offset, len };
-    offset -= len;
-    return arc;
+    const offset = accumulated;
+    accumulated += len;
+    return { color: seg.color, len, offset };
   });
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ overflow: 'visible' }}>
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#F0F0F0" strokeWidth={14} />
-      {arcs.map((arc, i) => arc.len > 0 && (
-        <circle
-          key={i}
-          cx={cx} cy={cy} r={r}
-          fill="none"
-          stroke={arc.color}
-          strokeWidth={14}
-          strokeDasharray={`${arc.len} ${circ - arc.len}`}
-          strokeDashoffset={arc.offset}
-          strokeLinecap="butt"
-        />
-      ))}
+      {/* Background Track */}
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#EDF2F7" strokeWidth={15} />
+
+      {/* Slices group rotated -90deg so 0 is at 12 o'clock */}
+      <g transform={`rotate(-90 ${cx} ${cy})`}>
+        {arcs.map((arc, i) => (
+          <circle
+            key={i}
+            cx={cx}
+            cy={cy}
+            r={r}
+            fill="none"
+            stroke={arc.color}
+            strokeWidth={15}
+            strokeDasharray={`${arc.len} ${circ - arc.len}`}
+            strokeDashoffset={-arc.offset}
+            strokeLinecap="butt"
+          />
+        ))}
+      </g>
+
       {/* Center */}
-      <text x={cx} y={cy - 6} textAnchor="middle" fontSize="22" fontWeight="900" fill="#1A2B4A">{total}</text>
-      <text x={cx} y={cy + 12} textAnchor="middle" fontSize="10" fill="#6B7A9A">Total Schemes</text>
+      <text x={cx} y={cy - 4} textAnchor="middle" fontSize="24" fontWeight="900" fill="#1A2B4A">{displayTotal}</text>
+      <text x={cx} y={cy + 14} textAnchor="middle" fontSize="10" fontWeight="700" fill="#718096">Total Schemes</text>
     </svg>
   );
 }
