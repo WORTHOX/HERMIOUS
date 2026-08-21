@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="24" fill="#E8F5E9"/>
+  <path d="M60,25 C50,40 50,55 60,65 C70,55 70,40 60,25 Z" fill="#43A047"/>
+  <path d="M40,45 C45,55 55,60 60,65 C55,50 45,45 40,45 Z" fill="#66BB6A"/>
+  <path d="M80,45 C75,55 65,60 60,65 C65,50 75,45 80,45 Z" fill="#66BB6A"/>
+  <text x="60" y="95" font-family="Arial, sans-serif" font-size="16" font-weight="900" fill="#1B5E20" text-anchor="middle" letter-spacing="1.5">emami</text>
+</svg>

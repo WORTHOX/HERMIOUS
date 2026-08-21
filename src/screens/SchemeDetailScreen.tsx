@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Profile } from '../data';
-import { fmt, deleteScheme } from '../data';
+import { fmt, deleteScheme, getBrandLogo } from '../data';
 import { ArrowLeft, Share2, FileText } from 'lucide-react';
 
 interface Props {
@@ -99,12 +99,17 @@ export default function SchemeDetailScreen({ profile, schemeId, onBack, onDelete
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
           <div style={{
             width: 48, height: 48, borderRadius: 12,
-            background: scheme.brandColor + '15', border: `2px solid ${scheme.brandColor}30`,
+            background: '#fff', border: '1.5px solid var(--border)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            overflow: 'hidden', padding: 4, boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
           }}>
-            <span style={{ fontSize: scheme.brandInitials.length > 2 ? 9 : 13, fontWeight: 900, color: scheme.brandColor }}>
-              {scheme.brandInitials}
-            </span>
+            {getBrandLogo(scheme.brand) ? (
+              <img src={getBrandLogo(scheme.brand)} alt={scheme.brand} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            ) : (
+              <span style={{ fontSize: scheme.brandInitials.length > 2 ? 9 : 13, fontWeight: 900, color: scheme.brandColor }}>
+                {scheme.brandInitials}
+              </span>
+            )}
           </div>
           <div>
             <p style={{ fontWeight: 800, fontSize: 16, color: 'var(--text-primary)', lineHeight: 1.3 }}>{scheme.name}</p>

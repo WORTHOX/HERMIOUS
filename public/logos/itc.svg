@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="24" fill="#FFF8E1"/>
+  <polygon points="60,20 100,85 20,85" fill="#0D47A1"/>
+  <polygon points="60,30 92,80 28,80" fill="#FBC02D"/>
+  <polygon points="60,40 84,75 36,75" fill="#0D47A1"/>
+  <text x="60" y="68" font-family="Arial, sans-serif" font-size="18" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">ITC</text>
+  <text x="60" y="108" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#0D47A1" text-anchor="middle">Enduring Value</text>
+</svg>

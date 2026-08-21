@@ -1,5 +1,5 @@
 import React from 'react';
-import { Profile, fmt } from '../data';
+import { Profile, fmt, getBrandLogo } from '../data';
 import { Menu, Bell, AlertTriangle, Filter } from 'lucide-react';
 
 interface Props {
@@ -298,8 +298,17 @@ export default function DashboardScreen({ profile, onSchemeClick, onAddScheme, o
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: 8, background: s.brandColor + '18', border: `1.5px solid ${s.brandColor}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <span style={{ fontSize: 10, fontWeight: 900, color: s.brandColor }}>{s.brandInitials}</span>
+                    <div style={{
+                      width: 36, height: 36, borderRadius: 8,
+                      background: '#fff', border: '1px solid var(--border)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                      overflow: 'hidden', padding: 2,
+                    }}>
+                      {getBrandLogo(s.brand) ? (
+                        <img src={getBrandLogo(s.brand)} alt={s.brand} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                      ) : (
+                        <span style={{ fontSize: 10, fontWeight: 900, color: s.brandColor }}>{s.brandInitials}</span>
+                      )}
                     </div>
                     <p style={{ fontWeight: 600, fontSize: 14, color: 'var(--text-primary)' }}>{s.name}</p>
                   </div>

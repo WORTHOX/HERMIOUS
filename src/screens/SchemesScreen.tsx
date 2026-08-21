@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Profile, Scheme, fmt } from '../data';
+import { Profile, Scheme, fmt, getBrandLogo } from '../data';
 import { Search, SlidersHorizontal } from 'lucide-react';
 
 interface Props {
@@ -133,12 +133,17 @@ function SchemeCard({ scheme: s, onClick }: { scheme: Scheme; onClick: () => voi
         {/* Brand logo */}
         <div style={{
           width: 44, height: 44, borderRadius: 10,
-          background: s.brandColor + '15', border: `1.5px solid ${s.brandColor}30`,
+          background: '#fff', border: '1.5px solid var(--border)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+          overflow: 'hidden', padding: 3, boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
         }}>
-          <span style={{ fontSize: s.brandInitials.length > 2 ? 9 : 12, fontWeight: 900, color: s.brandColor, letterSpacing: -0.5 }}>
-            {s.brandInitials}
-          </span>
+          {getBrandLogo(s.brand) ? (
+            <img src={getBrandLogo(s.brand)} alt={s.brand} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+          ) : (
+            <span style={{ fontSize: s.brandInitials.length > 2 ? 9 : 12, fontWeight: 900, color: s.brandColor, letterSpacing: -0.5 }}>
+              {s.brandInitials}
+            </span>
+          )}
         </div>
 
         <div style={{ flex: 1, minWidth: 0 }}>

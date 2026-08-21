@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="24" fill="#E8EAF6"/>
+  <path d="M35,30 C35,70 50,85 60,85 C70,85 85,70 85,30 L73,30 C73,62 66,74 60,74 C54,74 47,62 47,30 Z" fill="#1A237E"/>
+  <circle cx="42" cy="38" r="4" fill="#3949AB"/>
+  <circle cx="78" cy="38" r="4" fill="#3949AB"/>
+  <circle cx="60" cy="50" r="5" fill="#3949AB"/>
+  <text x="60" y="105" font-family="Arial, sans-serif" font-size="14" font-weight="900" fill="#1A237E" text-anchor="middle" letter-spacing="1">HUL</text>
+</svg>

@@ -20,6 +20,7 @@ export interface Scheme {
   brand: string;          // "Parle"
   brandColor: string;     // "#D62828"
   brandInitials: string;  // "P"
+  brandLogo?: string;     // "/logos/parle.svg"
   dateRange: string;      // "01 Oct – 31 Oct 2024"
   status: 'active' | 'at_risk' | 'completed';
   dueDate: string;
@@ -31,7 +32,6 @@ export interface Scheme {
   achievedPct: number;
   // Offer
   offer: string;          // "4.5% special rebate + 1 case free per 20 cases"
-  // Financial
   expectedBenefit: number;
   atRiskAmount: number;
   // Ledger
@@ -52,6 +52,25 @@ export interface Scheme {
     balanceClaim: number;
     includes: string[];
   };
+}
+
+export function getBrandLogo(brand: string): string {
+  const map: Record<string, string> = {
+    'Parle': '/logos/parle.svg',
+    'Britannia': '/logos/britannia.svg',
+    'Dabur': '/logos/dabur.svg',
+    'Nestlé': '/logos/nestle.svg',
+    'Nestle': '/logos/nestle.svg',
+    'ITC': '/logos/itc.svg',
+    'HUL': '/logos/hul.svg',
+    'P&G': '/logos/png.svg',
+    'Colgate': '/logos/colgate.svg',
+    'Marico': '/logos/marico.svg',
+    'Godrej': '/logos/godrej.svg',
+    'Emami': '/logos/emami.svg',
+    'Tata': '/logos/tata.svg',
+  };
+  return map[brand] || '';
 }
 
 export interface Profile {

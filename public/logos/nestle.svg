@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="24" fill="#E3F2FD"/>
+  <path d="M30,75 C45,65 75,65 90,75 L85,82 C72,75 48,75 35,82 Z" fill="#1565C0"/>
+  <circle cx="60" cy="45" r="14" fill="#1565C0"/>
+  <circle cx="48" cy="52" r="8" fill="#1976D2"/>
+  <circle cx="72" cy="52" r="8" fill="#1976D2"/>
+  <text x="60" y="102" font-family="Arial, sans-serif" font-size="15" font-weight="900" fill="#0D47A1" text-anchor="middle" letter-spacing="0.5">Nestlé</text>
+</svg>

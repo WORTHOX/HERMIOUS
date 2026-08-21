@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="24" fill="#C62828"/>
+  <path d="M20,68 C40,82 80,82 100,68 C90,88 30,88 20,68 Z" fill="#FFFFFF" opacity="0.85"/>
+  <text x="60" y="60" font-family="Arial, sans-serif" font-size="18" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.5">Colgate</text>
+</svg>

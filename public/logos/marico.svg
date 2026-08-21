@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="24" fill="#FFF3E0"/>
+  <circle cx="60" cy="45" r="20" fill="#FF6F00"/>
+  <path d="M60,45 C50,30 30,45 60,70 C90,45 70,30 60,45 Z" fill="#2E7D32"/>
+  <text x="60" y="100" font-family="Arial, sans-serif" font-size="15" font-weight="800" fill="#2E7D32" text-anchor="middle">marico</text>
+</svg>

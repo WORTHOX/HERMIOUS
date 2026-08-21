@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="24" fill="#E8F5E9"/>
+  <path d="M60,25 C45,25 35,40 38,55 C30,60 30,75 42,82 L42,95 L78,95 L78,82 C90,75 90,60 82,55 C85,40 75,25 60,25 Z" fill="#2E7D32"/>
+  <circle cx="52" cy="48" r="4" fill="#81C784"/>
+  <circle cx="68" cy="48" r="4" fill="#81C784"/>
+  <circle cx="60" cy="62" r="5" fill="#81C784"/>
+  <text x="60" y="110" font-family="Arial, sans-serif" font-size="14" font-weight="800" fill="#1B5E20" text-anchor="middle">Dabur</text>
+</svg>

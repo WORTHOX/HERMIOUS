@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Profile } from '../data';
-import { fmt } from '../data';
+import { fmt, getBrandLogo } from '../data';
 import { ArrowLeft, Share2, CheckCircle } from 'lucide-react';
 
 interface Props {
@@ -49,12 +49,17 @@ export default function ClaimDossierScreen({ profile, schemeId, onBack }: Props)
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
           <div style={{
             width: 44, height: 44, borderRadius: 10,
-            background: scheme.brandColor + '15', border: `1.5px solid ${scheme.brandColor}30`,
+            background: '#fff', border: '1.5px solid var(--border)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            overflow: 'hidden', padding: 3, boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
           }}>
-            <span style={{ fontSize: scheme.brandInitials.length > 2 ? 9 : 12, fontWeight: 900, color: scheme.brandColor }}>
-              {scheme.brandInitials}
-            </span>
+            {getBrandLogo(scheme.brand) ? (
+              <img src={getBrandLogo(scheme.brand)} alt={scheme.brand} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            ) : (
+              <span style={{ fontSize: scheme.brandInitials.length > 2 ? 9 : 12, fontWeight: 900, color: scheme.brandColor }}>
+                {scheme.brandInitials}
+              </span>
+            )}
           </div>
           <div>
             <p style={{ fontWeight: 800, fontSize: 15, color: 'var(--text-primary)' }}>{scheme.name}</p>
