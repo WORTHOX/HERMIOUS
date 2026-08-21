@@ -56,19 +56,21 @@ export interface Scheme {
 
 export function getBrandLogo(brand: string): string {
   const map: Record<string, string> = {
-    'Parle': '/logos/parle.svg',
+    'Parle': '/logos/parle.png',
     'Britannia': '/logos/britannia.svg',
     'Dabur': '/logos/dabur.svg',
     'Nestlé': '/logos/nestle.svg',
     'Nestle': '/logos/nestle.svg',
-    'ITC': '/logos/itc.svg',
+    'ITC': '/logos/itc.png',
     'HUL': '/logos/hul.svg',
-    'P&G': '/logos/png.svg',
+    'P&G': '/logos/png.png',
     'Colgate': '/logos/colgate.svg',
     'Marico': '/logos/marico.svg',
     'Godrej': '/logos/godrej.svg',
     'Emami': '/logos/emami.svg',
-    'Tata': '/logos/tata.svg',
+    'Tata': '/logos/tata.png',
+    'Glow & Lovely': '/logos/glow_lovely.png',
+    'Fair & Lovely': '/logos/glow_lovely.png',
   };
   return map[brand] || '';
 }
